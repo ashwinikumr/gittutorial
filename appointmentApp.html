@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Appointment App</title>
+</head>
+<body>
+
+  <h2>Booking Appointment App</h2>
+
+  <form id="appointmentForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required>
+
+    <button type="button" onclick="saveAppointmentDetails()">Book Appointment</button>
+  </form>
+
+  <h3>Appointments:</h3>
+  <ul id="appointmentsList"></ul>
+
+  <script>
+    function saveAppointmentDetails() {
+      // Get appointment details from the form
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var id = document.getElementById('id').value;
+
+      // Create an object to store appointment details
+      var appointmentDetails = {
+        name: name,
+        email: email,
+        id: id
+      };
+
+      // Retrieve existing appointment details from local storage
+      var existingAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+
+      // Add the new appointment details to the array
+      existingAppointments.push(appointmentDetails);
+
+      // Convert the array to a JSON string
+      var allAppointmentsJSON = JSON.stringify(existingAppointments);
+
+      // Store the JSON string in local storage with the key 'appointments'
+      localStorage.setItem('appointments', allAppointmentsJSON);
+
+      // Display all appointments on the screen
+      displayAppointments();
+    }
+
+    function displayAppointments() {
+      // Retrieve appointments from local storage
+      var storedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+
+      // Get the list element
+      var appointmentsList = document.getElementById('appointmentsList');
+
+      // Clear the previous content
+      appointmentsList.innerHTML = '';
+
+      // Display each appointment
+      storedAppointments.forEach(function(appointment) {
+        var listItem = document.createElement('li');
+        listItem.textContent = `Name: ${appointment.name}, Email: ${appointment.email}, ID: ${appointment.id}`;
+        appointmentsList.appendChild(listItem);
+      });
+    }
+
+    // Display existing appointments on page load
+    displayAppointments();
+  </script>
+
+</body>
+</html>

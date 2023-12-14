@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Appointment App</title>
+  
+</head>
+<body>
+
+  <form id="appointmentForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required>
+
+    <button type="button" onclick="saveAppointment()">Book Appointment</button>
+  </form>
+
+  <ul id="userList"></ul>
+
+  <script>
+    // Load existing user details from local storage
+    var existingAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+
+    // Display existing user details on the UI
+    displayAppointments();
+
+    function saveAppointment() {
+      // Get user details from the form
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var id = document.getElementById('id').value;
+
+      // Create an object to store user details
+      var userDetails = {
+        name: name,
+        email: email,
+        id: id
+      };
+
+      // Add the new user details to the array
+      existingAppointments.push(userDetails);
+
+      // Convert the array to a JSON string
+      var allAppointmentsJSON = JSON.stringify(existingAppointments);
+
+      // Store the JSON string in local storage
+      localStorage.setItem('appointments', allAppointmentsJSON);
+
+      // Display the updated user details on the UI
+      displayAppointments();
+
+      // Clear the form fields
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('id').value = '';
+    }
+
+    function displayAppointments() {
+      var userListElement = document.getElementById('userList');
+      userListElement.innerHTML = '';
+
+      existingAppointments.forEach(function(appointment, index) {
+        // Create a list item for each user details
+        var listItem = document.createElement('li');
+        listItem.classList.add('userDetails');
+        listItem.innerHTML = `
+          <p><strong>Name:</strong> ${appointment.name}</p>
+          <p><strong>Email:</strong> ${appointment.email}</p>
+          <p><strong>ID:</strong> ${appointment.id}</p>
+          <button onclick="deleteAppointment(${index})">Delete</button>
+        `;
+
+        // Append the list item to the user list
+        userListElement.appendChild(listItem);
+      });
+    }
+
+    function deleteAppointment(index) {
+      // Remove the appointment from the array
+      existingAppointments.splice(index, 1);
+
+      // Update local storage with the modified array
+      localStorage.setItem('appointments', JSON.stringify(existingAppointments));
+
+      // Display the updated user details on the UI
+      displayAppointments();
+    }
+  </script>
+
+</body>
+</html>

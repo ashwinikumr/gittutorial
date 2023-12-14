@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Details Form</title>
+</head>
+<body>
+
+  <form id="userForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <button type="button" onclick="saveUserDetails()">Submit</button>
+  </form>
+
+  <script>
+    function saveUserDetails() {
+      // Get user details from the form
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+
+      // Create an object to store user details
+      var userDetails = {
+        name: name,
+        email: email
+      };
+
+      // Convert the object to a JSON string
+      var userDetailsJSON = JSON.stringify(userDetails);
+
+      // Store the JSON string in local storage
+      localStorage.setItem('userDetails', userDetailsJSON);
+
+      alert('User details saved successfully!');
+    }
+  </script>
+
+</body>
+</html>
